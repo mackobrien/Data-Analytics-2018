@@ -1,0 +1,97 @@
+---
+title: "Lab 5"
+author: '[Team Mack and Jill]'
+date: '[10/23/2017]'
+output:
+  html_document:
+    fig_height: 4
+    fig_width: 6
+  pdf_document: default
+---
+
+**Author:** [Mackenzie O'Brien]
+
+**Discussants:** [Jillian Preece]
+
+* * *
+
+**Load data:**
+
+
+```{r echo=FALSE}
+load(url("http://www.openintro.org/stat/data/mlb11.RData"))
+```
+
+* * *
+
+#### 1:
+The relationship is somewhat linear, with a .611 correlation value. I would feel hesitant to use a linear model; if I knew a team's at bats, I could estimate, but probably not correctly predict the number of runs.
+```{r}
+
+plot(mlb11$at_bats~mlb11$runs)
+cor(mlb11$at_bats,mlb11$runs)
+```
+
+
+#### 2:
+ Looking at the plot, there is a correlation between the number of at bats and runs; the more at bats, the more often there are also a lot of runs. However, there are outliers in the plot, where there were a small number of at bats but still a lot of runs and vice versa. The correlation is at 61% positive, which is moderate in strength.
+```{r}
+plot_ss(x=mlb11$at_bats, y=mlb11$runs, showSquares = TRUE)
+
+```
+
+
+#### 3: 
+The smallest sum of squares that we got was 128026.6
+```{r}
+m1 <- lm(runs ~ at_bats, data = mlb11)
+summary(m1)
+```
+
+#### 4:
+The formula is y= -85.15663 + 0.34154*runs. The slope tells us that the number of home runs increases by 0.34 for every run. The more a team scores, the more likely there are to have home runs as well, which increases their chances of winning.
+```{r}
+m2<-lm(homeruns~runs, data = mlb11)
+summary(m2)
+```
+
+#### 5:
+He would predict around 700 runs based on the linear model, which is an overestimate by about 25 runs
+```{r}
+plot(mlb11$runs ~ mlb11$at_bats)
+abline(m1)
+```
+
+#### 6:
+There doesn't seem to be any pattern in the residuals, which means that the number of at bats does not significantly effect the number of runs.
+```{r}
+plot(m1$residuals ~ mlb11$at_bats)
+abline(h = 0, lty = 3)  # adds a horizontal dashed line at y = 0
+```
+
+#### 7:
+The normal probability plot suggests that the data is nearly normal, and the histogram is close, but suggests that it is less normal.
+```{r}
+hist(m1$residuals)
+qqnorm(m1$residuals)
+qqline(m1$residuals)  # adds diagonal line to the normal prob plot
+```
+
+#### 8:
+
+
+* * *
+
+## On your own
+
+#### 1:
+
+#### 2:
+
+#### 3:
+
+#### 4:
+
+#### 5:
+
+#### 6:

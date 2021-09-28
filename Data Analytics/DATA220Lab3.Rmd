@@ -1,0 +1,89 @@
+---
+title: "Lab 3"
+author: "[Mack and Jill]"
+date: "[10/2/2017]"
+output:
+  html_document:
+    fig_height: 4
+    fig_width: 6
+---
+
+**Author:** [Mackenzie O'Brien]
+
+**Discussants:** [Jillian Preece]
+
+* * *
+
+**Load Kobe's data:**
+```{r}
+load(url("http://foxweb.marist.edu/users/duy.nguyen2/kobe.RData"))
+head(kobe)
+
+kobe$basket[1:9]
+```
+
+* * *
+
+#### Exercise 1: 
+A streak of length 1 means that he, for example, made the one basket in a row and then missed the next. A streak of length 0 means that he missed the basket and did not have a hit.
+```{r}
+kobe_streak<-calc_streak(kobe$basket)
+barplot(table(kobe_streak))
+```
+
+
+#### Exercise 2:
+Based on the barplot, Kobe had a lot of misses (streaks of length 0), and seemed to make a lot of baskets once and then miss the next. He did not seems to make a lot in a row, typically his streak length was 0 or 1, with his longest streak being 4 in a row.
+```{r}
+outcomes<-c("heads","tails")
+sample(outcomes,size = 1,replace = TRUE)
+sim_fair_coin<-sample(outcomes,size = 100,replace = TRUE)
+sim_fair_coin
+table(sim_fair_coin)
+
+```
+
+#### Exercise 3:
+In our simulation of the unfair coin,heads only came up 17 times, while tails appeared 83 times.
+```{r}
+set.seed(1)
+sim_unfair_coin<-sample(outcomes,size = 100,replace = TRUE, prob=c(0.2,0.8))
+sim_unfair_coin
+table(sim_unfair_coin)
+```
+
+
+#### Exercise 4:
+To make the shooter simulation match Kobe, the hit probability must be set to 45% and the miss probability to 55%. 
+```{r}
+outcomes<-c("H","M")
+sim_basket<-sample(outcomes,size = 1,replace = TRUE)
+?sample
+sim_basket<-sample(outcomes,size=133,replace=TRUE,prob=c(0.45,0.55))
+sim_basket
+kobe$basket
+```
+
+
+* * *
+### On your own:
+```{r}
+#streak lengths of sim_basket
+sim_streak<-calc_streak(sim_basket)
+sim_streak
+barplot(table(sim_streak))
+```
+
+
+#### 1:
+
+
+#### 2:
+
+
+#### 3:
+
+
+#### 4:
+
+

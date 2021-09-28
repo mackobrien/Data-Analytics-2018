@@ -1,0 +1,117 @@
+---
+title: "Lab 8"
+author: '[Team Jill and Mack]'
+date: '[12/07/17]'
+output:
+  html_document:
+    fig_height: 4
+    fig_width: 6
+  pdf_document: default
+---
+
+**Author:** [Mack ]
+
+**Discussants:** [Jill]
+
+* * *
+
+**Load data:**
+
+
+
+```{r echo=FALSE}
+library("ISLR")
+?Weekly
+head(Weekly)
+attach(Weekly)
+```
+
+* * *
+
+#### 1:
+```{r}
+plot(Volume~Year)
+plot(Today~Year)
+summary(Weekly)
+
+```
+
+
+#### 2:
+```{r}
+reg<-glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,data=Weekly,family="binomial")
+summary(reg)
+```
+Lag2 appears to be statistically significant.
+#### 3: 
+```{r}
+train=(Year<2008)
+Weekly.2008=Weekly[!train,]
+dim(Weekly.2008)
+Direction.2008=Direction[!train]
+glm.fits=glm(Direction~Lag2,data=Weekly,family=binomial,subset=train)
+glm.probs=predict(glm.fits,Weekly.2008,type="response")
+
+glm.pred=rep("Down",156)
+glm.pred[glm.probs>.5]="Up"
+
+table(glm.pred,Direction.2008)
+
+mean(glm.pred==Direction.2008)
+
+(7+79)/(7+79+5+65)
+```
+
+#### 4:
+```{r}
+#12
+glm.fits12=glm(Direction~Lag1+Lag2,data=Weekly,family=binomial,subset=train)
+glm.probs=predict(glm.fits12,Weekly.2008,type="response")
+
+glm.pred=rep("Down",156)
+glm.pred[glm.probs>.5]="Up"
+
+table(glm.pred,Direction.2008)
+
+mean(glm.pred==Direction.2008)
+#123
+glm.fits123=glm(Direction~Lag1+Lag2+Lag3,data=Weekly,family=binomial,subset=train)
+glm.probs=predict(glm.fits123,Weekly.2008,type="response")
+
+glm.pred=rep("Down",156)
+glm.pred[glm.probs>.5]="Up"
+
+table(glm.pred,Direction.2008)
+
+mean(glm.pred==Direction.2008)
+#1234
+glm.fits1234=glm(Direction~Lag1+Lag2+Lag3+Lag4,data=Weekly,family=binomial,subset=train)
+glm.probs=predict(glm.fits1234,Weekly.2008,type="response")
+
+glm.pred=rep("Down",156)
+glm.pred[glm.probs>.5]="Up"
+
+table(glm.pred,Direction.2008)
+
+mean(glm.pred==Direction.2008)
+#135Volume
+glm.fits135V=glm(Direction~Lag1+Lag3+Lag5+Volume,data=Weekly,family=binomial,subset=train)
+glm.probs=predict(glm.fits135V,Weekly.2008,type="response")
+
+glm.pred=rep("Down",156)
+glm.pred[glm.probs>.5]="Up"
+
+table(glm.pred,Direction.2008)
+
+mean(glm.pred==Direction.2008)
+AIC(glm.fits,glm.fits12,glm.fits123,glm.fits1234,glm.fits135V)
+```
+
+#### 5:
+
+#### 6:
+
+#### 7:
+
+#### 8:
+

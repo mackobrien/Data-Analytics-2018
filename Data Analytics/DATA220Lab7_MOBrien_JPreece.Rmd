@@ -1,0 +1,139 @@
+---
+title: "Lab 7"
+author: "[Team Mack and Jill]"
+date: "[11/16/2017]"
+output:
+  html_document:
+    fig_height: 4
+    fig_width: 6
+---
+
+**Author:** [Mack]
+
+**Discussants:** [Jill]
+
+* * *
+
+**Load data:**
+```{r}
+load(url("http://foxweb.marist.edu/users/duy.nguyen2/atheism.RData"))
+head(atheism)
+```
+
+* * *
+
+#### 1:
+We think that the findings are sample statistics, because only 50,000 people were surveyed globally, yet the population of the world is around 7.6 billion.
+#### 2:
+Each row of table 6 corresponds to a different countries' polled religious beliefs, displaying the percentages based on the sample of religious, non religious, and atheists.
+Each row of atheism corresponds to an individual answer of the poll, giving that person's country, religious viwes, and the year in which they were surveyed.
+#### 3: 
+Yes, the proportion matches up with Tabl6 at 5%.
+```{r}
+us12 <- subset(atheism, nationality == "United States" & year == "2012")
+head(us12)
+summary(us12)
+proportion=50/(952+50)
+proportion
+```
+
+#### 4:
+The conditions that need to be met for a confidence interval are: the sample is simple and random, the sampling distribution is approximately normal or n>=40, and the population standard deviation is unknown. The sample from us12 is random, n>40, and we do not know the standard deviation.
+```{r}
+load(url("http://foxweb.marist.edu/users/duy.nguyen2/inference.RData"))
+inference(us12$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+
+```
+
+
+#### 5:
+me <- 2 * sqrt(p * (1 - p)/n)
+
+```{r}
+meUS<- 2 * sqrt(0.0499 * (1 - 0.0499)/1002)
+meUS
+```
+#### 6:
+```{r}
+brazil02 <- subset(atheism, nationality == "Brazil" & year == "2012")
+inference(brazil02$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+meB <- 2 * sqrt(0.01 * (1 - 0.01/2002))
+
+france02<-subset(atheism, nationality == "France" & year == "2012")
+inference(france02$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+meF <- 2 * sqrt(0.2873 * (1 - 0.2873)/1688)
+```
+
+#### 7:
+The closer the population proportion is to .5, the larger it is, while the closer to 1.0 or 0.0, the smaller it is.
+```{r}
+n <- 1000
+p <- seq(0, 1, 0.01)
+me <- 2 * sqrt(p * (1 - p)/n)
+plot(me ~ p, ylab = "Margin of Error", xlab = "Population Proportion")
+```
+
+#### 8:
+```{r}
+p <- 0.1
+n <- 1040
+p_hats <- rep(0, 5000)
+
+for(i in 1:5000){
+  samp <- sample(c("atheist", "non_atheist"), n, replace = TRUE, prob = c(p, 1-p))
+  p_hats[i] <- sum(samp == "atheist")/n
+}
+
+hist(p_hats, main = "p = 0.1, n = 1040", xlim = c(0, 0.18))
+```
+
+#### 9:
+```{r}
+p <- 0.1
+n <- 400
+p_hats <- rep(0, 5000)
+
+for(i in 1:5000){
+  samp <- sample(c("atheist", "non_atheist"), n, replace = TRUE, prob = c(p, 1-p))
+  p_hats[i] <- sum(samp == "atheist")/n
+}
+
+hist(p_hats, main = "p = 0.1, n = 400", xlim = c(0, 0.18))
+
+
+p <- 0.02
+n <- 1040
+p_hats <- rep(0, 5000)
+
+for(i in 1:5000){
+  samp <- sample(c("atheist", "non_atheist"), n, replace = TRUE, prob = c(p, 1-p))
+  p_hats[i] <- sum(samp == "atheist")/n
+}
+
+hist(p_hats, main = "p = 0.02, n = 1040", xlim = c(0, 0.18))
+
+p <- 0.02
+n <- 400
+p_hats <- rep(0, 5000)
+
+for(i in 1:5000){
+  samp <- sample(c("atheist", "non_atheist"), n, replace = TRUE, prob = c(p, 1-p))
+  p_hats[i] <- sum(samp == "atheist")/n
+}
+
+hist(p_hats, main = "p = 0.02, n = 400", xlim = c(0, 0.18))
+```
+
+#### 10:
+
+
+* * *
+
+## On your own
+
+#### 1:
+
+#### 2:
+
+#### 3:
+

@@ -1,0 +1,212 @@
+---
+title: "Lab 2"
+author: "[Jillian Preece and Mackenzie O'Brien]"
+date: "[September 20, 2017]"
+output:
+  html_document:
+    fig_height: 4
+    fig_width: 6
+---
+
+**Author:** [Jillian Preece]
+
+**Discussants:** [Mackenzie O'Brien]
+
+* * *
+
+**Load CDC data:**
+```{r}
+source("http://foxweb.marist.edu/users/duy.nguyen2/cdc.R")
+names(cdc)
+```
+
+* * *
+
+#### Exercise 1: 
+```{r}
+head(cdc)
+tail(cdc)
+length(cdc)
+
+summary(cdc$weight)
+190-140
+mean(cdc$weight)
+var(cdc$weight)
+median(cdc$weight)
+
+table(cdc$smoke100)
+
+smoke<-table(cdc$smoke100)/20000
+
+barplot(smoke)
+```
+[There are nine variables:
+-genhlth: categorical
+-exerany: discrete
+-hlthplan: discrete
+-smoke100: discrete
+-height: discrete
+-weight: discrete
+-wtdesire: discrete
+-age: discrete
+-gender: categorical]
+
+#### Exercise 2:
+```{r}
+table(cdc$gender,cdc$smoke100)
+mosaicplot(table(cdc$gender,cdc$smoke100))
+
+#summary of height
+summary(cdc$height)
+#summary of age
+summary(cdc$age)
+
+#relative frequency of gender
+table(cdc$gender)/20000
+
+#relative frequency of exerany
+table(cdc$exerany)/20000
+
+#how many males?
+tapply(cdc$gender, cdc["gender"], length)
+
+
+#proportion reported in excellent health
+table(cdc$genhlth=="excellent")/20000
+```
+[Interquartile Range of Height: 70-64=6
+IQR of Age: 57-31=26]
+
+
+#### Exercise 3:
+```{r}
+dim(cdc)
+cdc[567,6]
+names(cdc)
+cdc[1:10,6]
+1:10
+cdc[1:10,]
+cdc[,6]
+cdc$weight
+cdc$weight[567]
+cdc$weight[1:10]
+
+```
+[The mosaic plot shows that men are more likely to smoke than females, with about half of males reporting that they smoke. Approxiamtely 60% of females reported that they didn't smoke.]
+
+
+#### Exercise 4:
+```{r}
+cdc$gender == "m"
+cdc$age>30
+mdata<- subset(cdc, cdc$gender == "m")
+head(mdata)
+m_and_over30 <-subset(cdc, gender =="m" & age>30)
+m_or_over30<- subset(cdc, gender =="m" | age>30)
+
+under23_and_smoke=subset(cdc, cdc$age<23 & cdc$smoke100==1)
+head(under23_and_smoke)
+
+boxplot(cdc$height)
+summary(cdc$height)
+boxplot(cdc$height~cdc$gender)
+
+bmi<-(cdc$weight / cdc$height^2)*703
+boxplot(bmi~cdc$genhlth)
+```
+
+
+#### Exercise 5:
+```{r}
+boxplot(bmi~cdc$gender)
+
+hist(cdc$age)
+hist(bmi)
+hist(bmi,breaks=50)
+
+cdc$exerany_cat = NA
+cdc$exerany_cat[cdc$exerany == 1] = "exercised"
+cdc$exerany_cat[cdc$exerany == 0] = "didn't exercise"
+cdc$exerany_cat = as.factor(cdc$exerany_cat)
+
+```
+[The first boxplotshows that as health got poorer, BMI increased.
+
+We chose gender as the second variable, and that boxplot shows that while males and females have similar BMIs, the males had high and low outliers, while females only had high outliers.]
+
+#### Exercise 6:
+```{r}
+boxplot(bmi~cdc$exerany_cat)
+```
+
+
+#### Exercise 7:
+```{r}
+cdc$genhlth_twolevs = NA  # create new variable, and fill it in with NAs first
+cdc$genhlth_twolevs[cdc$genhlth %in% c("fair", "poor")] = "bad"
+cdc$genhlth_twolevs[cdc$genhlth %in% c("good", "very good", "excellent")] = "better"
+cdc$genhlth_twolevs = as.factor(cdc$genhlth_twolevs)  # save new variable as factor
+
+boxplot(bmi~cdc$genhlth_twolevs)
+```
+
+
+
+#### Exercise 8:
+```{r}
+median_height = median(cdc$height)
+cdc$height_cat = NA  # create new variable, and fill it in with NAs first
+cdc$height_cat[cdc$height < median_height] = "below median"
+cdc$height_cat[cdc$height >= median_height] = "at or above median"
+cdc$height_cat = as.factor(cdc$height_cat)  # save new variable as factor
+table(cdc$height_cat)
+
+cdc$height_cat = factor(cdc$height_cat, levels = c("below median", "at or above median"))
+
+table(cdc$height_cat)
+
+
+```
+
+* * *
+
+**Load class survey data:**
+```{r}
+surveyS15 = read.csv("http://foxweb.marist.edu/users/duy.nguyen2/surveyS15.csv")
+head(surveyS15)
+names(surveyS15)
+```
+
+* * *
+### On your own:
+
+
+#### 1:
+```{r}
+summary(surveyS15$fav_cheese)
+summary(surveyS15$parents_age)
+
+boxplot(surveyS15$parents_age~surveyS15$fav_cheese)
+
+youngparents = subset(surveyS15, surveyS15$parents_age<30)
+oldparents = subset(surveyS15, surveyS15$parents_age>=30)
+```
+
+
+
+#### 2:
+```{r}
+summary(surveyS15$hogwarts_house)
+summary(surveyS15$pepsi_or_coke)
+
+mosaicplot(table(surveyS15$hogwarts_house,surveyS15$pepsi_or_coke))
+
+
+```
+
+
+#### 3: 
+[Statistical operations such as mean, median, and other summary functions were covered in the textbook and in class, as well as subset, transform, and attach. However, we have yet to cover detach or within. Other functions covered include the probability/distribution functions such as pnorm and pbinom and the other similar functions. We have not yet covered the curve function or qq plots. Overall, we are following the textbook pretty thoroughly in our class lectures and labs. ]
+
+
+

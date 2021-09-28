@@ -1,0 +1,123 @@
+---
+title: "Data 220: Exam 2"
+author: '[Mackenzie OBrien]'
+date: '[Due on Tuesday November 7th at 5:00 pm (ET)]'
+output:
+  html_document:
+    fig_height: 4
+    fig_width: 6
+  pdf_document: default
+---
+
+
+
+
+* * *
+
+**Load data:**
+
+
+```{r echo=FALSE}
+library(MASS)
+```
+
+* * *
+
+#### 1:
+```{r}
+?Boston
+head(Boston)
+```
+There are 14 variables, and 506 rows. There are no categorical variables. 
+The discrete variables are: chas, rad, zn, tax
+The continuous variables are: crim, indus, nox, rm, age, ptratio, black, lstat, medv
+
+#### 2:
+I would use plot(y~x) to display the relationship between two numerical variables. The relationship looks mostly linear. The linear equation of the relationship is y= 34.55384 -0.95005(lstat). The coefficients of the linear equation  significant at 0, we reject the null, the  R-squared value is 0.5541. The residual plot has some outliers, but mostly hovers just below zero, which would be a normal residual plot. The variance of the residuals is 38.55917, which is pretty wide, a nearly constant variance would be somewhere around 0.
+
+```{r}
+attach(Boston)
+plot(medv~lstat)
+lmB<-lm(medv~lstat)
+abline(lmB)
+summary(lmB) #linear model
+plot(lmB$residuals~lmB$fitted)
+qqnorm(lmB$residuals) #normal R-squared plot
+qqline(lmB$residuals)
+var(lmB$residuals)
+```
+
+
+#### 3: 
+```{r}
+plot(medv~rm)
+abline(lm(medv~rm))
+cor(medv,rm)
+lmR<-lm(medv~rm)
+
+plot(lmR$residuals~lmR$fitted)
+qqnorm(lmR$residuals)
+qqline(lmR$residuals)
+summary(lmR)
+anova(lmR)
+```
+
+#### 4:
+Based on the line, the value should be about 10. The prediction gives us a value of 10.83992. The prediction is slightly overestimating the value. The residual would be -0.83992, since it is actual - predicted
+```{r}
+#pick a number from rm and use linear regression to predict the corresponding medv value. Is it over/underestimating the true value, what is the residual.
+pred=data.frame(rm=5)
+predicted=predict(lmR,pred)
+predicted
+
+```
+
+#### 5:
+PlantGrowth is comparing yields of dried plant weights based on a control and two different treatments. There are three levels, ctrl, trt1, and trt2 for PlantGrowth$group.
+```{r}
+#Describe ?PlantGrowth. Is PlantGrowth$group a factor variable. How many levels are there?
+?PlantGrowth
+detach(Boston)
+attach(PlantGrowth)
+group
+```
+
+
+#### 6:
+If you want to the margin of error to be 1%, the larger the sample size, the less the margin of error, since it is more likely that the true value is in the range. Since the interval is 95%,  the sample size would need to be about 95/96.
+```{r}
+#95% confidence interval for the mean of the weight. If we want the margin of error to be 1%, what should the sample size be?
+load(url("http://foxweb.marist.edu/users/duy.nguyen2/inference.RData"))
+inference(y = weight, est = "mean", type = "ci", null = 0, alternative = "twosided", method = "theoretical", conflevel = 0.95)
+
+phat=mean(weight)
+n=96
+z.value=qnorm((1-0.95)/2)
+z.value
+ME=z.value*phat/sqrt(n)
+ME
+```
+
+#### 7:
+It does not appear the the three groups will have the same mean since the boxplot shows that the trt2 group has the highest median, followed by the ctrl and then the trt1 group. Trt3 also has a very small range in which it matches up with ctrl and trt1, so it is unlikely that that will match.
+```{r}
+#Boxplot of weight based on group. Does it appear that the three groups will have the same mean? Explain
+boxplot(weight~group)
+```
+
+#### 8:
+The p-value of this test also is below 0.05, causing us to also reject the null hypothesis when using this function. This means that the means are not the same.
+```{r}
+#Use the analysis of variance to test whether the three groups have the same mean. Is the test significant? why/why not. Support using graphical/numerical methods.
+results=aov(weight~group,data=PlantGrowth)
+summary(results)
+```
+
+#### 9:
+Based on the aggregation and the pairwise t-test, none of the means are equal since the aggregation shows the true means and none are equal, and if they were equal, the pairwise t test would mean that the values would be 1.
+```{r}
+#which groups have different means/ Support
+aggregate(weight~group, PlantGrowth,mean)
+pairwise.t.test(weight,group, p.adj="bonferroni")
+```
+

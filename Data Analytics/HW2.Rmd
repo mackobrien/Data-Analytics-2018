@@ -1,0 +1,80 @@
+**Author:** [Mackenzie O'Brien]
+
+* * *
+
+#### Question 3 
+
+```{r}
+# codes for question 3 go here
+playername<-c("Jose Angulo","Johnny Arteaga", "Mehdi Ballouchy", "Brandon Barklage","Jonathan Borrajo", "Wilman Conde", "Kenny Cooper", "Thierry Henry", "Corey Hertzog", "Markus Holgersson", "Stephen Keel", "Connor Lade", "Joel Lindpere", "Ryan Maduro", "Rafael Marquez", "Dax McCarty", "Ryan Meara", "Roy Miller", "Victor Palsson", "Heath Pearce","Dane Richards", "Tyler Ruthven","Jan Gunnar Solli", "Teemu Tainio", "Jeremy Vuolo")
+basesalary<-c(33750, 44000, 138188, 44000, 44000, 125000, 275000, 5000000, 75000, 190000, 65000, 33750, 175000, 44000, 4600000, 174375, 33750, 112495, 80000, 292499, 170000, 33750, 184000, 200000, 44000)
+NYRedBullSal<-data.frame(playername,basesalary)
+NYRedBullSal
+
+```
+
+#### Question 4
+
+```{r}
+# enter your code for question 4
+length(NYRedBullSal$playername) #sample size
+min(NYRedBullSal$basesalary) #min
+max(NYRedBullSal$basesalary) #max
+mean(NYRedBullSal$basesalary) #mean
+median(NYRedBullSal$basesalary) #median
+var(NYRedBullSal$basesalary) #variance
+sd(NYRedBullSal$basesalary) #std
+```
+
+#### Question 5
+
+```{r}
+# enter your code for question 5
+#scatter plot
+plot(NYRedBullSal$basesalary, xlab="Player", ylab="Base Salary")
+```
+
+#### Question 6
+```{r}
+NYRedBullSal[NYRedBullSal$playername=="Thierry Henry",]
+NYRedBullSal[NYRedBullSal$playername=="Rafael Marquez",]
+```
+
+####Question 7
+```{r}
+NY.sorted <- sort(NYRedBullSal$basesalary) #sorts the players by salary
+plot(NY.sorted, xlab="Player", ylab="Base Salary")
+```
+
+####Question 8
+```{r}
+od<-order(NYRedBullSal$basesalary)
+od
+```
+#### Question 9
+```{r}
+which.min(NYRedBullSal$basesalary)
+NYRedBullSal[1,]
+```
+#### Question 10
+```{r}
+which.max(NYRedBullSal$basesalary)
+NYRedBullSal[8,]
+```
+
+#### Question 11
+```{r}
+boxplot(NYRedBullSal$basesalary)
+#It seems that there are two outliers from the data set that are much higher than everything else, which throws off the boxplot. 
+```
+
+#### Question 12
+```{r}
+removed<- subset(NYRedBullSal,NYRedBullSal$basesalary<300000)
+removed
+boxplot(removed$basesalary)
+# This box plot has a much more even spread, with 50% of players receiving more than ~75000 and half receiving less than that.
+```
+
+
+

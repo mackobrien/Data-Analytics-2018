@@ -1,0 +1,146 @@
+---
+title: "DATA 220:Test 1"
+author: "[Mackenzie O'Brien]"
+date: "[10/06/2017]"
+output:
+  html_document:
+    fig_height: 4
+    fig_width: 6
+---
+
+
+
+
+* * *
+### PART I:
+
+**Load the data:**
+```{r}
+source("http://foxweb.marist.edu/users/duy.nguyen2/cdc.R")
+names(cdc)
+```
+
+* * *
+
+#### Exercise 1: 
+```{r}
+is.data.frame(cdc) #returns value of TRUE if the data is a data frame
+nrow(cdc) #returns the number of rows in the data frame
+ncol(cdc) #returns the number of columns
+any(is.na(cdc)) #returns TRUE if there is any NA values in the dataset, returns FALSE if there are not, which there are not any
+```
+
+
+#### Exercise 2:
+```{r}
+mean(cdc$weight) #mean
+median(cdc$weight) #median
+sd(cdc$weight) #standard deviation
+#Based on the mean and median, in which the mean is 4 lbs higher than the median, we can say that the data is skewed to the right
+
+#histogram
+hist(cdc$weight, n=20)
+#Based on the histogram, it seems that there is a larger amount of people in the weight of 160+, with a tail on the right, which brings the average up.
+```
+
+#### Exercise 3:
+```{r}
+plot(density(cdc$weight)) #density plot
+qqnorm(cdc$weight) #qqplot
+qqline(cdc$weight)
+#Based on the plots, the weight is not normally distributed. The density plot does not show a bell curve, instead it is skewed right, and the qq plot is also not linear, and instead has a curve.
+```
+
+
+#### Exercise 4:
+```{r}
+1-pnorm(60,67.1829,4.125954) ##over 5 ft tall
+pnorm(72,67.1829,4.125954) ##under 6ft 
+pnorm(72,67.1829,4.125954)-pnorm(60,67.1829,4.125954) ##between 6ft and 5 ft
+
+qnorm(0.10,67.1829,4.125954) ##10th percentile
+qnorm(0.90,67.1829,4.125954) ##90th percentile
+```
+
+#### Exercise 5:
+```{r}
+tapply(cdc$gender,cdc["gender"],length) ##gets counts
+tapply(cdc$gender,cdc["gender"],length)/length(cdc$gender) ##gets proportions
+
+dbinom(4,5,0.47845) ##exactly 4 males out of 5
+1-pbinom(2,5,0.47845) ##at least 2 males
+pbinom(5,5,0.47845)-pbinom(3,5,0.47845) ##between 5 and 3 males
+pbinom(3,5,0.47845) ##at most 3 males
+```
+
+#### Exercise 6:
+```{r}
+table(cdc$gender, cdc$genhlth) #gets the table of the data
+#the table tells us what number of males and females reports on the status of how they are feeling, choosing excellent, very good, good, fair, or poor.
+
+(2298+2359)/20000 ##probability of excellent health condition
+2298/20000 ##excellent health and is a male
+(394)/(2359+3590+2953+1135+394) ##probabiliy that female has excellent health
+
+##P(a)+P(b)-P(a&b) female or poor health
+((2359+3590+2953+1135+394)/20000) + ((283+394)/20000) - ((394/20000))
+
+```
+
+#### Exercise 7:
+```{r}
+cdc1<-transform(cdc,bmi=(cdc$weight/cdc$height^2)*703)
+summary(cdc1)
+boxplot(cdc1$bmi~cdc1$gender)
+boxplot(cdc1$bmi~cdc1$genhlth)
+#I see that people who report excellent health in general have lower bmis and have a smaller spread, while people who report poorer health have a wide spread.
+```
+
+#### Exercise 8:
+```{r}
+female<-subset(cdc, gender="female")
+summary(female$genhlth)
+
+female$genhlth_newlevels = NA
+female$genhlth_newlevels[female$genhlth %in% c("excellent","very good", "good")] = "good"
+female$genhlth_newlevels[female$genhlth %in% c("fair","poor")] = "not good"
+female$genhlth_newlevels = as.factor(female$genhlth_newlevels)
+head(female)
+
+female1<-transform(female,bmi=(female$weight/female$height^2)*703)
+head(female1)
+
+boxplot(female1$bmi~female1$genhlth_newlevels)
+#Based on the new boxplot, females who reported good health had a smaller spread and in general better bmi's, while those who reported not good had a wider spread and higher outliers.
+```
+### PART II
+#### Exercise 9:
+
+
+```{r}
+s=0
+i=4
+while(i<=14){
+  s=s+ ((2*i^4)/(sqrt(i+3)) + cos(i*pi/3))
+  i=i+1
+}
+s
+```
+
+#### Exercise  10: (Bonus):
+```{r}
+s=0 
+for(k in 1:10) {
+  for (i in 1:10) {
+    for(j in 1:10){
+      s=s + ((2*j+3)/sqrt(i))*3*k
+    }
+  }
+}
+s
+```
+
+
+
+
+
